@@ -66,7 +66,7 @@ void Deserialize (Node*& root,fstream& file)
             }
 }
 
-void preorder(Node *root)
+/*void preorder(Node *root)
 {
     if(root == NULL)
         return;
@@ -76,7 +76,7 @@ void preorder(Node *root)
         preorder(root->left);
         preorder(root->right);
     }
-}
+}*/
 
 void updatetree(Node* fin, Node*& prefin)
 {
