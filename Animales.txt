@@ -1,0 +1,27 @@
+Es mamifero?
+Vive en el agua?
+Es grande?
+Ballena
+#
+#
+Delfin
+#
+#
+Vive en los arboles?
+Mono
+#
+#
+Toro
+#
+#
+Es un pez?
+Rodaballo
+#
+#
+Repta?
+Serpiente
+#
+#
+Rana
+#
+#
