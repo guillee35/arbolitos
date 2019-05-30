@@ -12,6 +12,10 @@ struct Node		//estructura de los nodos del arbol
 Node *root;		//puntero a nodo utilizado en las funciones
 Node *start;		//puntero al primero nodo del arbol
 
+fstream file;
+string filename;       //Elegir el fichero en el que vamos a buscar
+
+
 void question(Node* root, Node* prev);
 void Serialize (Node*& root, fstream& file);
 void Deserialize(Node*& root, fstream& file);
@@ -33,7 +37,7 @@ void ready()
 
 }
 
-int choose_file(string &files_name)
+int choose_file(string &file_name)
 {
 	int n;
 	cout<<"Elige el NUMERO correspondiente a lo que quieres clasificar:"<<endl;
@@ -44,19 +48,19 @@ int choose_file(string &files_name)
 	cin>>n;
 	switch(n)
 	{
-		case 1: {files_name="Animales.txt";
+		case 1: {file_name="Animales.txt";
 		break;}
-		case 2: {files_name="Comida.txt";
+		case 2: {file_name="Comida.txt";
 		break;}
-		case 3: {files_name="Peliculas.txt";
+		case 3: {file_name="Peliculas.txt";
 		break;}
-		case 4: {files_name="Musica.txt";
+		case 4: {file_name="Musica.txt";
 		break;}
 		default:{
 		cout<<"\nEl numero seleccionado no esta entre las opciones propuestas"<<endl<<endl;
 		return 1;}
 	}
-	cout<<"\nABRIENDO EL FICHERO: "<<files_name<<endl;
+	cout<<"\nABRIENDO EL FICHERO: "<<file_name<<endl;
 	return 0;
 }
 
@@ -143,6 +147,20 @@ void updatetree(Node* fin, Node*& prefin)
     }
 
     cout<<endl<<"Actualizacion del fichero"<<endl<<endl;
+    file.open(filename,ios::out);  //Abre el fichero para escribir
+        if(file.is_open())
+        {
+                Serialize(start,file);
+		cout << endl << "Fichero actualizado correctamente";
+        }
+        else
+        {
+                cout << endl << "NO SE PUEDO ACTUALIZAR EL FICHERO" << endl;
+        }
+
+
+
+
 }
 
 void finalquestion(Node* root, Node* prev)
@@ -197,17 +215,15 @@ int main()
 {
 	ready();	//Instrucciones iniciales
 	int x;
-	fstream file;
 	string reply;
-	string filesname;	//Elegir el fichero en el que vamos a buscar
-	while(x=choose_file(filesname));
-	file.open(filesname,ios::in); 	//Abre el fichero para leerlo
+	while(x=choose_file(filename));
+	file.open(filename,ios::in); 	//Abre el fichero para leerlo
 	if(file.is_open()){				//Comprueba si se ha podido abrir el fichero
 		Deserialize(start,file);		//Construir el arbol
 		file.close();
 		do{
 			question(start,NULL);
-			cout<<"Quieres hacer otra busqueda en "<<filesname<<"?	[y/n]"<<endl;
+			cout<<"Quieres hacer otra busqueda en "<<filename<<"?	[y/n]"<<endl;
 			cin>>reply;
 			while(reply!="y" && reply!="n")
 			{
@@ -220,7 +236,7 @@ int main()
 	{
 		cout<<"\nFICHERO NO ENCONTRADO, por favor, comprueba que el fichero necesario se encuentra en el directorio"<<endl;
 	}
-	file.open(filesname,ios::out);	//Abre el fichero para escribir
+	file.open(filename,ios::out);	//Abre el fichero para escribir
 	if(file.is_open())
 	{
 		Serialize(start,file);
