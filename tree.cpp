@@ -26,7 +26,7 @@ void ready();
 void ready()
 {
 
-	cout<<"\n\n\nEste programa en C++ permite hacer busquedas en un fichero"<<endl;
+	cout<<endl<<endl<<endl<<"Este programa en C++ permite hacer busquedas en un fichero"<<endl;
 	cout<<"Para ello se realizaran varias preguntas que guiaran al programa hasta el elemento buscado "<<endl;
 	cout<<"Si no encuentra lo que esta buscando puede incluirlo en el fichero, para lo cual debera definir: "<<endl;
 	cout<<"\tEl nombre del nuevo elemento a clasificar"<<endl;
@@ -57,10 +57,10 @@ int choose_file(string &file_name)
 		case 4: {file_name="Musica.txt";
 		break;}
 		default:{
-		cout<<"\nEl numero seleccionado no esta entre las opciones propuestas"<<endl<<endl;
+		cout<<endl<<"El numero seleccionado no esta entre las opciones propuestas"<<endl<<endl;
 		return 1;}
 	}
-	cout<<"\nABRIENDO EL FICHERO: "<<file_name<<endl;
+	cout<<endl<<"ABRIENDO EL FICHERO: "<<file_name<<endl;
 	return 0;
 }
 
@@ -71,7 +71,7 @@ void Serialize (Node*& root, fstream& file)		//Escribe el arbol en el fichero
         file<<"#"<<endl;
     else
     {
-        file<<root->ans<<endl;
+        file<< root->ans <<endl;
         Serialize(root->left,file);
         Serialize(root->right,file);
     }
@@ -85,11 +85,16 @@ void Deserialize (Node*& root,fstream& file)	//Construye el arbol a partir del f
                 getline(file,str);
                 cin.clear();
             }
+
             else
+	   {
+		cout<< "Parse ended";
                 return;
-            if(str!="#")
+            }
+	    if(strcmp(str.c_str(),"#"))
             {
-                root = new Node;
+                cout<<str <<endl;
+		root = new Node;
                 root->ans = str;
                 Deserialize(root->left,file);
                 Deserialize(root->right,file);
@@ -104,10 +109,10 @@ void Deserialize (Node*& root,fstream& file)	//Construye el arbol a partir del f
 void updatetree(Node* fin, Node*& prefin)
 {
     string ans,qn,reply;
-    cout<<"\n\nQue estabas buscando entonces?"<<endl;			//Nuevo nodo_respuesta que quiero clasificar
+    cout<<endl<<"Que estabas buscando entonces?"<<endl;			//Nuevo nodo_respuesta que quiero clasificar
     cin.ignore();
     getline(cin,ans);
-    cout<<"Que pregunta (con respuesta si o no) distigue "<<ans<<" de "<<fin->ans<<" ?"<<endl;		//Nuevo nodo_pregunta para distinguir entre la nueva respuesta y la anterior
+    cout<<"Que pregunta (con respuesta si o no) distigue " << ans << " de " << fin->ans << " ?" <<endl;		//Nuevo nodo_pregunta para distinguir entre la nueva respuesta y la anterior
     getline(cin,qn);
     Node *ansnode, *qnnode;
     ansnode = new Node;			//Crea nodo_respuesta
@@ -166,11 +171,11 @@ void updatetree(Node* fin, Node*& prefin)
 void finalquestion(Node* root, Node* prev)
 {
     string reply;
-    cout<<"Es "<<root->ans<<" lo que estabas buscando?  [y/n]"<<endl;
+    cout << endl << "Es " << root->ans <<" lo que estabas buscando? \t[y/n]"<<endl;
     cin>>reply;
     if(reply=="y")			//Elemento encontrado, busqueda finalizada
     {
-	cout<<"\n\nLo he encontrado"<<endl;
+	cout<<endl<<"Lo he encontrado"<<endl;
     }
     else if(reply=="n")		//Hay que modificar el arbol
     {
@@ -188,7 +193,7 @@ void question(Node* root, Node* prev)
     string reply;
     if(root->left!=NULL && root->right!=NULL)		//Son los nodo_preguntas
     {
-        cout<<root->ans<<" [y/n]"<<endl;
+        cout<< endl << root->ans << "\t[y/n]" <<endl;
         cin>>reply;
         if(reply=="y")
         {
@@ -234,7 +239,7 @@ int main()
 	}
 	else
 	{
-		cout<<"\nFICHERO NO ENCONTRADO, por favor, comprueba que el fichero necesario se encuentra en el directorio"<<endl;
+		cout<<endl<<"FICHERO NO ENCONTRADO, por favor, comprueba que el fichero necesario se encuentra en el directorio"<<endl;
 	}
 	file.open(filename,ios::out);	//Abre el fichero para escribir
 	if(file.is_open())
@@ -243,7 +248,7 @@ int main()
 	}
 	else
 	{
-		cout<<"\nNO SE PUEDO ACTUALIZAR EL FICHERO"<<endl;
+		cout<<endl<<"NO SE PUEDO ACTUALIZAR EL FICHERO"<<endl;
 	}
     return 0;
 }

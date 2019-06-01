@@ -22,6 +22,10 @@ Repta?
 Serpiente
 #
 #
+Puede volar?
+Pájaro
+#
+#
 Rana
 #
 #
