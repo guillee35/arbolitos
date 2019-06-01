@@ -88,12 +88,10 @@ void Deserialize (Node*& root,fstream& file)	//Construye el arbol a partir del f
 
             else
 	   {
-		cout<< "Parse ended";
                 return;
             }
 	    if(strcmp(str.c_str(),"#"))
             {
-                cout<<str <<endl;
 		root = new Node;
                 root->ans = str;
                 Deserialize(root->left,file);
