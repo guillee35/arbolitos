@@ -1,31 +1,20 @@
-Es mamifero?
-Vive en el agua?
-Es grande?
+Es mamifero?$si$no
+Vive en el agua?$si$no
+Es grande?$si$no
 Ballena
-#
-#
 Delfin
-#
-#
-Vive en los arboles?
+Vive en los arboles?$si$no
 Mono
-#
-#
-Toro
-#
-#
-Es un pez?
+De que tamaño es?$Grande$Mediano$Pequeño
+Tiene el cuello largo?$Si$No
+Jirafa
+Elefante
+Perro
+Ratón
+Es un pez?$si$no
 Rodaballo
-#
-#
-Repta?
+Repta?$si$no
 Serpiente
-#
-#
-Puede volar?
+Puede volar?$si$no
 Pájaro
-#
-#
 Rana
-#
-#

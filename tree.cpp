@@ -1,27 +1,36 @@
 #include <iostream>
 #include <fstream>
 #include <string.h>
+#include <vector>
 
 using namespace std;
 struct Node		//estructura de los nodos del arbol
 {
     string ans;
-    struct Node* left;
-    struct Node* right;
+    vector<Node*> *v ;
 };
+
+template <class Container> // Función para partir strings en vectores de strings
+void str_split(const std::string& str, Container& cont,
+              char delim = '$')
+{
+    std::size_t current, previous = 0;
+    current = str.find(delim);
+    while (current != std::string::npos) {
+        cont.push_back(str.substr(previous, current - previous));
+        previous = current + 1;
+        current = str.find(delim, previous);
+    }
+    cont.push_back(str.substr(previous, current - previous));
+}
+
+
 Node *root;		//puntero a nodo utilizado en las funciones
 Node *start;		//puntero al primero nodo del arbol
 
 fstream file;
 string filename;       //Elegir el fichero en el que vamos a buscar
 
-
-void question(Node* root, Node* prev);
-void Serialize (Node*& root, fstream& file);
-void Deserialize(Node*& root, fstream& file);
-void updatetree(Node* fin, Node*& prefin);
-void finalquestion(Node* root, Node* prev);
-void ready();
 
 void ready()
 {
@@ -30,10 +39,7 @@ void ready()
 	cout<<"Para ello se realizaran varias preguntas que guiaran al programa hasta el elemento buscado "<<endl;
 	cout<<"Si no encuentra lo que esta buscando puede incluirlo en el fichero, para lo cual debera definir: "<<endl;
 	cout<<"\tEl nombre del nuevo elemento a clasificar"<<endl;
-	cout<<"\tLa pregunta que distinga entre el nuevo el elemento y el que propuso el programa "<<endl<<endl<<endl;
-	cout<<"NOTA: solo se puede responder a las preguntas con:"<<endl;
-	cout<<"\t[y] para si"<<endl;
-	cout<<"\t[n] para no"<<endl<<endl<<endl;
+	cout<<"\tLa pregunta que distinga entre los elementos a evaluar "<<endl<<endl<<endl;
 
 }
 
@@ -68,97 +74,110 @@ int choose_file(string &file_name)
 void Serialize (Node*& root, fstream& file)		//Escribe el arbol en el fichero
 {
     if(root == NULL)
+    {
         file<<"#"<<endl;
+    }
     else
     {
+	vector<string> choices;		//OPTIMIZAR
+	str_split(root->ans,choices);
+	int node_size=choices.size()-1;
+
+
+	//std::copy(choices.begin(), choices.end(), std::ostream_iterator<std::string>(cout, "\n")); //Output choices
+
         file<< root->ans <<endl;
-        Serialize(root->left,file);
-        Serialize(root->right,file);
+	for(int i=0;i<node_size;i++)
+	{
+        	Serialize((*root->v)[i],file);
+	}
     }
 }
 
 void Deserialize (Node*& root,fstream& file)	//Construye el arbol a partir del fichero
 {
-            string str;
-            if(!file.eof())
-            {
-                getline(file,str);
-                cin.clear();
-            }
+	string str;
+	if(!file.eof())
+	{
+		getline(file,str);
+		cin.clear();
+	}
 
-            else
-	   {
-                return;
-            }
-	    if(strcmp(str.c_str(),"#"))
-            {
+	else
+	{
+		return;
+        }
+
+	if(strcmp(str.c_str(),"#")) //Comprobar que el nodo no esté vacio
+
+	{
 		root = new Node;
                 root->ans = str;
-                Deserialize(root->left,file);
-                Deserialize(root->right,file);
-            }
-            else
-            {
-                root = NULL;
-            }
+		std::vector<string> choices;	//OPTIMIZAR
+		str_split(str,choices);
+		int node_size=choices.size()-1;
+		root->v=new vector<Node*>(node_size);
+		for(int i=0;i<node_size;i++)
+		{
+			Deserialize((*root->v)[i],file);
+		}
+	}
+	else
+	{
+		root = NULL;
+	}
 }
 
 
 void updatetree(Node* fin, Node*& prefin)
 {
-    string ans,qn,reply;
+    string ans,qn,temp;
+    int resp;
+    fin->v=new vector<Node*>;
+
     cout<<endl<<"Que estabas buscando entonces?"<<endl;			//Nuevo nodo_respuesta que quiero clasificar
     cin.ignore();
     getline(cin,ans);
-    cout<<"Que pregunta (con respuesta si o no) distigue " << ans << " de " << fin->ans << " ?" <<endl;		//Nuevo nodo_pregunta para distinguir entre la nueva respuesta y la anterior
+
+    cout<<"Que pregunta  distigue " << ans << " de " << fin->ans << " ?" <<endl;		//Nuevo nodo_pregunta para distinguir entre la nueva respuesta y la anterior
     getline(cin,qn);
-    Node *ansnode, *qnnode;
-    ansnode = new Node;			//Crea nodo_respuesta
-    ansnode->ans = ans;
-    ansnode->left = NULL;
-    ansnode->right = NULL;
+    cout<<"Cuantas respuestas existen para esa pregunta?"<<endl;
+    cin>>resp;
+    fin->v=new vector<Node*>(resp);
+    (*fin->v)[0]=new Node;
+    (*fin->v)[1]=new Node;
+    cout<<"Cual es la respuesta para " << ans << " ?" <<endl;
+    cin>>temp;
+    qn=qn+"$"+temp;
+    (*fin->v)[0]->ans=ans;
+    cout<<"Cual es la respuesta para " << fin->ans << " ?" <<endl;
+    cin>>temp;
+    qn=qn+"$"+temp;
+    (*fin->v)[1]->ans=fin->ans;
 
-    qnnode = new Node;			//Crea nodo_pregunta
-    qnnode->ans = qn;
-
-    cout<<"Cual seria la respuesta a esta pregunta para "<<ans<<"?  [y/n]"<<endl;			//Como sera la nueva estructura del arbol dependiendo de la respuesta a la pregunta
-    cin>>reply;
-    while(reply!="y" && reply!="n"){
-    	cout<<"Por favor, responda solo con [y/n]"<<endl;
-    	cin>>reply;
-    }
-
-    if (reply=="y")
+    for(int i=2;i<resp;i++)
     {
-	qnnode->left = ansnode;
-	qnnode->right = fin;
+	(*fin->v)[i]=new Node;
+	cout<<"Dame otro resultado posible" <<endl;
+	cin.ignore();
+	getline(cin,ans);
+	(*fin->v)[i]->ans=ans;
+	cout<<"Cual es la respuesta para \" " << ans << " \" ?" <<endl;
+	cin>>temp;
+	qn=qn+"$"+temp;
     }
-    else
-    {
-    	qnnode->left = fin;
-    	qnnode->right = ansnode;
-    }
+    fin->ans=qn;
 
-    if(prefin->left == fin)				//Inclusion de los nuevos nodos en el arbol
-    {
-        prefin->left = qnnode;
-    }
-
-    else if(prefin->right == fin)
-    {
-        prefin->right = qnnode;
-    }
-
-    cout<<endl<<"Actualizacion del fichero"<<endl<<endl;
+    cout<<endl<<"Actualizando del fichero..."<<endl;
     file.open(filename,ios::out);  //Abre el fichero para escribir
         if(file.is_open())
         {
                 Serialize(start,file);
-		cout << endl << "Fichero actualizado correctamente";
+		cout << endl << "Fichero actualizado correctamente"<<endl;
         }
         else
         {
-                cout << endl << "NO SE PUEDO ACTUALIZAR EL FICHERO" << endl;
+                cout << endl << "ERROR: NO SE PUEDO ABRIR EL FICHERO" << endl;
         }
 
 
@@ -188,28 +207,34 @@ void finalquestion(Node* root, Node* prev)
 
 void question(Node* root, Node* prev)
 {
-    string reply;
-    if(root->left!=NULL && root->right!=NULL)		//Son los nodo_preguntas
-    {
-        cout<< endl << root->ans << "\t[y/n]" <<endl;
-        cin>>reply;
-        if(reply=="y")
-        {
-	    question(root->left,root);
-	}
-        else if(reply=="n")
-	{
-	    question(root->right,root);
-	}
-        else
-        {
-            cout<<"Por favor, responda solo con [y/n]"<<endl;
-            question(root,prev);
-        }
-    }
-    else		//Son los nodo_respuesta, las raices del arbol
+    int reply;
+    std::vector<string> choices;
+    str_split(root->ans,choices);
+
+    if(choices.size()==1)  //Pregunta o respuesta?
     {
         finalquestion(root,prev);
+    }
+    else
+    {
+	cout<<choices[0]<<endl<<endl;
+	for(int i=1;i<choices.size();i++)
+	{
+	cout<<"\t"<<i<<".- "<<choices[i]<<endl;
+	}
+	cin>>reply;
+	cin.clear();
+	cin.ignore();
+	if(cin.fail()||reply<1||reply >= choices.size())
+	{
+		cout<<"Respuesta no válida, pruebe otra vez"<<endl;
+		question(root,prev);
+
+	}
+	else
+        {
+	    question((*root->v)[reply-1],root);
+	}
     }
 }
 
@@ -222,6 +247,7 @@ int main()
 	while(x=choose_file(filename));
 	file.open(filename,ios::in); 	//Abre el fichero para leerlo
 	if(file.is_open()){				//Comprueba si se ha podido abrir el fichero
+
 		Deserialize(start,file);		//Construir el arbol
 		file.close();
 		do{

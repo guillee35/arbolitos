@@ -1,19 +1,10 @@
-Es un postre?
-Se come frio?
-Helado
-#
-#
-Brownie
-#
-#
-Es un primer plato?
-Se toma en verano?
+Que plato es?$Primer Plato$Segundo Plato$Postre
+Es típico en verano?$Si$No
 Gazpacho
-#
-#
+Es sólido?$Sí$No
+Sushi
 Sopa
-#
-#
 Filete de pollo
-#
-#
+Se come frio?$Si$No
+Helado
+Brownie

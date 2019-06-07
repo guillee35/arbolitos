@@ -1,27 +1,9 @@
-Es rock?
-Son australianos?
+Qué tipo de Musica?$Clasica$Rock$Pop
+Messiah de Haendel
+De dónde es el grupo?$Australiano$Inglés$EEUU
 ACDC
-#
-#
-Son españoles?
-Sidecars
-#
-#
 The Beatles
-#
-#
-Es pop?
-Es comercial?
+The Doors
+Es comercial?$Si$No
 Ariana Grande
-#
-#
 Billie Eilish
-#
-#
-Es indie?
-Vetusta Morla
-#
-#
-Raphael
-#
-#
