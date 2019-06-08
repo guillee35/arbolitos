@@ -160,10 +160,13 @@ void updatetree(Node* fin, Node*& prefin)
 	(*fin->v)[i]=new Node;
 	cout<<"Dame otro resultado posible" <<endl;
 	cin.ignore();
+	cin.clear();
 	getline(cin,ans);
 	(*fin->v)[i]->ans=ans;
 	cout<<"Cual es la respuesta para \" " << ans << " \" ?" <<endl;
 	cin>>temp;
+        cin.ignore();
+        cin.clear();
 	qn=qn+"$"+temp;
     }
     fin->ans=qn;
