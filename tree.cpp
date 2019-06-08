@@ -135,23 +135,24 @@ void updatetree(Node* fin, Node*& prefin)
     int resp;
     fin->v=new vector<Node*>;
 
-    cout<<endl<<"Que estabas buscando entonces?"<<endl;			//Nuevo nodo_respuesta que quiero clasificar
-    cin.ignore();
+    cin.ignore();	
+    cout<<endl<<"Que estabas buscando entonces?"<<endl;			
     getline(cin,ans);
 
-    cout<<"Que pregunta  distigue " << ans << " de " << fin->ans << " ?" <<endl;		//Nuevo nodo_pregunta para distinguir entre la nueva respuesta y la anterior
+    cout<<"Que pregunta  distigue " << ans << " de " << fin->ans << " ?" <<endl;		
     getline(cin,qn);
     cout<<"Cuantas respuestas existen para esa pregunta?"<<endl;
     cin>>resp;
+    cin.ignore();
     fin->v=new vector<Node*>(resp);
     (*fin->v)[0]=new Node;
     (*fin->v)[1]=new Node;
     cout<<"Cual es la respuesta para " << ans << " ?" <<endl;
-    cin>>temp;
+    getline(cin, temp);
     qn=qn+"$"+temp;
     (*fin->v)[0]->ans=ans;
     cout<<"Cual es la respuesta para " << fin->ans << " ?" <<endl;
-    cin>>temp;
+    getline(cin, temp);
     qn=qn+"$"+temp;
     (*fin->v)[1]->ans=fin->ans;
 
@@ -159,14 +160,10 @@ void updatetree(Node* fin, Node*& prefin)
     {
 	(*fin->v)[i]=new Node;
 	cout<<"Dame otro resultado posible" <<endl;
-	cin.ignore();
-	cin.clear();
 	getline(cin,ans);
 	(*fin->v)[i]->ans=ans;
 	cout<<"Cual es la respuesta para \" " << ans << " \" ?" <<endl;
-	cin>>temp;
-        cin.ignore();
-        cin.clear();
+	getline(cin, temp);
 	qn=qn+"$"+temp;
     }
     fin->ans=qn;
