@@ -11,21 +11,21 @@ class Node		//estructura de los nodos del arbol
 	vector<Node*> *v ;
  public:
 
-	void setAns(string str)
+	void setAns(string str)//Guarda nueva pregunta
 	{
 		ans=str;
 	}
-	string getAns()
+	string getAns()//Saca pregunta actual
 	{
 		return ans;
 	}
 
-	vector<Node*>* getVector()
+	vector<Node*>* getVector()//Apunta al vector con los nodos que salen de este
 	{
 		return v;
 	}
 
-	void allocateVector(unsigned int size)
+	void allocateVector(unsigned int size) //crea un nuevo vector de nodos
 	{
 		v=new vector<Node*> (size);
 	}
@@ -122,23 +122,15 @@ void Deserialize (Node*& root,fstream& file)	//Construye el arbol a partir del f
 		return;
         }
 
-	if(strcmp(str.c_str(),"#")) //Comprobar que el nodo no esté vacio
-
+	root = new Node;
+	root->setAns(str);
+	std::vector<string> choices;
+	str_split(str,choices);
+	int node_size=choices.size()-1;
+	root->allocateVector(node_size);
+	for(int i=0;i<node_size;i++)
 	{
-		root = new Node;
-                root->setAns(str);
-		std::vector<string> choices;	//OPTIMIZAR
-		str_split(str,choices);
-		int node_size=choices.size()-1;
-		root->allocateVector(node_size);
-		for(int i=0;i<node_size;i++)
-		{
-			Deserialize((*root->getVector())[i],file);
-		}
-	}
-	else
-	{
-		root = NULL;
+		Deserialize((*root->getVector())[i],file);
 	}
 }
 
@@ -148,10 +140,11 @@ void updatetree(Node* fin, Node*& prefin)
     string ans,qn,temp;
     int resp;
 
+	//Esta sección del código guia al usuario para guardar nuevas soluciones
+
     cin.ignore();
     cout<<endl<<"Que estabas buscando entonces?"<<endl;
     getline(cin,ans);
-
     cout<<"Que pregunta  distigue " << ans << " de " << fin->getAns() << " ?" <<endl;
     getline(cin,qn);
     cout<<"Cuantas respuestas existen para esa pregunta?"<<endl;
