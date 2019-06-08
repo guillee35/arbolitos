@@ -1,9 +1,7 @@
-Qué tipo de Musica?$Clasica$Rock$Pop
-Messiah de Haendel
+Qué tipo de Musica?$Clasica$Rock$Rap
+Requiem de Mozart
 De dónde es el grupo?$Australiano$Inglés$EEUU
 ACDC
 The Beatles
 The Doors
-Es comercial?$Si$No
-Ariana Grande
-Billie Eilish
+Eminem

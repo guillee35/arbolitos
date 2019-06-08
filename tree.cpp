@@ -49,8 +49,8 @@ int choose_file(string &file_name)
 	cout<<"Elige el NUMERO correspondiente a lo que quieres clasificar:"<<endl;
 	cout<<"\t1.	Animales"<<endl;
 	cout<<"\t2.	Comida"<<endl;
-	cout<<"\t3.	Peliculas"<<endl;
-	cout<<"\t4.	Musica"<<endl;
+	cout<<"\t3.	Musica"<<endl;
+	cout<<"\t4.	Definido por el usuario"<<endl;
 	cin>>n;
 	switch(n)
 	{
@@ -58,9 +58,9 @@ int choose_file(string &file_name)
 		break;}
 		case 2: {file_name="Comida.txt";
 		break;}
-		case 3: {file_name="Peliculas.txt";
+		case 3: {file_name="Musica.txt";
 		break;}
-		case 4: {file_name="Musica.txt";
+		case 4: {file_name="Custom.txt";
 		break;}
 		default:{
 		cout<<endl<<"El numero seleccionado no esta entre las opciones propuestas"<<endl<<endl;
@@ -135,11 +135,11 @@ void updatetree(Node* fin, Node*& prefin)
     int resp;
     fin->v=new vector<Node*>;
 
-    cin.ignore();	
-    cout<<endl<<"Que estabas buscando entonces?"<<endl;			
+    cin.ignore();
+    cout<<endl<<"Que estabas buscando entonces?"<<endl;
     getline(cin,ans);
 
-    cout<<"Que pregunta  distigue " << ans << " de " << fin->ans << " ?" <<endl;		
+    cout<<"Que pregunta  distigue " << ans << " de " << fin->ans << " ?" <<endl;
     getline(cin,qn);
     cout<<"Cuantas respuestas existen para esa pregunta?"<<endl;
     cin>>resp;

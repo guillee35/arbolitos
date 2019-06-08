@@ -1,7 +1,12 @@
 Es mamifero?$si$no
 Vive en el agua?$si$no
 Es grande?$si$no
+Tipo de Ballena?$orca$Azul$Blanca$Tigre$Otra
+Orca
 Ballena
+Ballena Blanca
+Ballena tigre
+Otro
 Delfin
 Vive en los arboles?$si$no
 Mono
