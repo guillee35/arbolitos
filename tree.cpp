@@ -4,10 +4,31 @@
 #include <vector>
 
 using namespace std;
-struct Node		//estructura de los nodos del arbol
+class Node		//estructura de los nodos del arbol
 {
-    string ans;
-    vector<Node*> *v ;
+ private:
+	string ans;
+	vector<Node*> *v ;
+ public:
+
+	void setAns(string str)
+	{
+		ans=str;
+	}
+	string getAns()
+	{
+		return ans;
+	}
+
+	vector<Node*>* getVector()
+	{
+		return v;
+	}
+
+	void allocateVector(unsigned int size)
+	{
+		v=new vector<Node*> (size);
+	}
 };
 
 template <class Container> // Función para partir strings en vectores de strings
@@ -73,25 +94,18 @@ int choose_file(string &file_name)
 
 void Serialize (Node*& root, fstream& file)		//Escribe el arbol en el fichero
 {
-    if(root == NULL)
-    {
-        file<<"#"<<endl;
-    }
-    else
-    {
 	vector<string> choices;		//OPTIMIZAR
-	str_split(root->ans,choices);
+	str_split(root->getAns(),choices);
 	int node_size=choices.size()-1;
 
 
 	//std::copy(choices.begin(), choices.end(), std::ostream_iterator<std::string>(cout, "\n")); //Output choices
 
-        file<< root->ans <<endl;
+        file<< root->getAns() <<endl;
 	for(int i=0;i<node_size;i++)
 	{
-        	Serialize((*root->v)[i],file);
+        	Serialize((*root->getVector())[i],file);
 	}
-    }
 }
 
 void Deserialize (Node*& root,fstream& file)	//Construye el arbol a partir del fichero
@@ -112,14 +126,14 @@ void Deserialize (Node*& root,fstream& file)	//Construye el arbol a partir del f
 
 	{
 		root = new Node;
-                root->ans = str;
+                root->setAns(str);
 		std::vector<string> choices;	//OPTIMIZAR
 		str_split(str,choices);
 		int node_size=choices.size()-1;
-		root->v=new vector<Node*>(node_size);
+		root->allocateVector(node_size);
 		for(int i=0;i<node_size;i++)
 		{
-			Deserialize((*root->v)[i],file);
+			Deserialize((*root->getVector())[i],file);
 		}
 	}
 	else
@@ -133,40 +147,39 @@ void updatetree(Node* fin, Node*& prefin)
 {
     string ans,qn,temp;
     int resp;
-    fin->v=new vector<Node*>;
 
     cin.ignore();
     cout<<endl<<"Que estabas buscando entonces?"<<endl;
     getline(cin,ans);
 
-    cout<<"Que pregunta  distigue " << ans << " de " << fin->ans << " ?" <<endl;
+    cout<<"Que pregunta  distigue " << ans << " de " << fin->getAns() << " ?" <<endl;
     getline(cin,qn);
     cout<<"Cuantas respuestas existen para esa pregunta?"<<endl;
     cin>>resp;
     cin.ignore();
-    fin->v=new vector<Node*>(resp);
-    (*fin->v)[0]=new Node;
-    (*fin->v)[1]=new Node;
+    fin->allocateVector(resp);
+    (*fin->getVector())[0]=new Node;
+    (*fin->getVector())[1]=new Node;
     cout<<"Cual es la respuesta para " << ans << " ?" <<endl;
     getline(cin, temp);
     qn=qn+"$"+temp;
-    (*fin->v)[0]->ans=ans;
-    cout<<"Cual es la respuesta para " << fin->ans << " ?" <<endl;
+    (*fin->getVector())[0]->setAns(ans);
+    cout<<"Cual es la respuesta para " << fin->getAns() << " ?" <<endl;
     getline(cin, temp);
     qn=qn+"$"+temp;
-    (*fin->v)[1]->ans=fin->ans;
+    (*fin->getVector())[1]->setAns(fin->getAns());
 
     for(int i=2;i<resp;i++)
     {
-	(*fin->v)[i]=new Node;
+	(*fin->getVector())[i]=new Node;
 	cout<<"Dame otro resultado posible" <<endl;
 	getline(cin,ans);
-	(*fin->v)[i]->ans=ans;
+	(*fin->getVector())[i]->setAns(ans);
 	cout<<"Cual es la respuesta para \" " << ans << " \" ?" <<endl;
 	getline(cin, temp);
 	qn=qn+"$"+temp;
     }
-    fin->ans=qn;
+    fin->setAns(qn);
 
     cout<<endl<<"Actualizando del fichero..."<<endl;
     file.open(filename,ios::out);  //Abre el fichero para escribir
@@ -188,7 +201,7 @@ void updatetree(Node* fin, Node*& prefin)
 void finalquestion(Node* root, Node* prev)
 {
     string reply;
-    cout << endl << "Es " << root->ans <<" lo que estabas buscando? \t[y/n]"<<endl;
+    cout << endl << "Es " << root->getAns() <<" lo que estabas buscando? \t[y/n]"<<endl;
     cin>>reply;
     if(reply=="y")			//Elemento encontrado, busqueda finalizada
     {
@@ -209,7 +222,7 @@ void question(Node* root, Node* prev)
 {
     int reply;
     std::vector<string> choices;
-    str_split(root->ans,choices);
+    str_split(root->getAns(),choices);
 
     if(choices.size()==1)  //Pregunta o respuesta?
     {
@@ -220,7 +233,7 @@ void question(Node* root, Node* prev)
 	cout<<choices[0]<<endl<<endl;
 	for(int i=1;i<choices.size();i++)
 	{
-	cout<<"\t"<<i<<".- "<<choices[i]<<endl;
+	cout<<"\t"<<i<<".- "<<choices[i]<<endl; //Mostrar Pregunta por pantalla
 	}
 	cin>>reply;
 	cin.clear();
@@ -233,7 +246,7 @@ void question(Node* root, Node* prev)
 	}
 	else
         {
-	    question((*root->v)[reply-1],root);
+	    question((*root->getVector())[reply-1],root);
 	}
     }
 }
